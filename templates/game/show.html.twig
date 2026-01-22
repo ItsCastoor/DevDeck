@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DevDeck – Partie n°{{ partie.id }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/game.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <h1>DevDeck – Partie #{{ partie.id }}</h1>
+    <p>
+        Statut : <strong>{{ partie.statut }}</strong><br>
+        Tour : {{ partie.numeroTour }}
+    </p>
+
+    <hr>
+
+    <h2>IA (main cachée)</h2>
+    <p>Cartes en main : <strong>{{ mainIA|length }}</strong></p>
+
+    <div class="card-row">
+        {% for i in 1..mainIA|length %}
+            <div class="devcard devcard--back">
+                <img
+                        src="{{ asset('assets/cards/card-back.png') }}"
+                        alt="Carte cachée"
+                        class="devcard__img"
+                >
+            </div>
+        {% else %}
+            <p>Aucune carte en main</p>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+
+    <div class="card-row">
+        {% for cp in plateauIA %}
+            {% set c = cp.carte %}
+            <div class="devcard devcard--board">
+                <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
+                {#            <div class="devcard__title">{{ c.nom }}</div> #}
+                {#            <div class="devcard__desc">{{ c.description }}</div> #}
+            </div>
+        {% else %}
+            <p>Le Plateau de votre adversaire est vide.</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="titleH2">Plateau</h2>
+
+    <div class="card-row">
+        {% for cp in plateauHumain %}
+            {% set c = cp.carte %}
+            <div class="devcard devcard--board">
+                <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
+                {#            <div class="devcard__title">{{ c.nom }}</div> #}
+                {#            <div class="devcard__desc">{{ c.description }}</div> #}
+            </div>
+        {% else %}
+            <p>Votre Plateau est vide.</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="titleH2">Main</h2>
+    <div class="card-row">
+        {% for cp in mainHumain %}
+            {% set c = cp.carte %}
+            <div class="devcard">
+                <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
+                {#            <div class="devcard__title">{{ c.nom }}</div> #}
+                {#            <div class="devcard__meta"> #}
+                {#                <span>Type: {{ c.type }}</span> #}
+                {#                <span>Coût PD: {{ c.coutPD }}</span> #}
+                {#                <span>+Argent: {{ c.gainArgent }}</span> #}
+                {#            </div> #}
+                {#            <div class="devcard__desc">{{ c.description }}</div> #}
+
+                <form method="post" action="{{ path('partie_play_card', {id: partie.id, cartePartieId: cp.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('play_card_' ~ cp.id) }}">
+                    <button class="btn" type="submit">Jouer sur le plateau</button>
+                </form>
+            </div>
+        {% else %}
+            <p>Aucune carte en main.</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
