@@ -8,7 +8,7 @@
 
 {% block body %}
 
-    <h1>DevDeck – Partie #{{ partie.id }}</h1>
+    <h1 class="titleH1">DevDeck</h1>
     <p>
         Statut : <strong>{{ partie.statut }}</strong><br>
         Tour : {{ partie.numeroTour }}
@@ -16,14 +16,14 @@
 
     <hr>
 
-    <h2>IA (main cachée)</h2>
-    <p>Cartes en main : <strong>{{ mainIA|length }}</strong></p>
+    <h2 class="titleH2">Joueur IA</h2>
 
+    <h2 class="titleH2">Main</h2>
     <div class="card-row">
         {% for i in 1..mainIA|length %}
             <div class="devcard devcard--back">
                 <img
-                        src="{{ asset('assets/cards/card-back.png') }}"
+                        src="{{ asset('assets/cards/dos carte.png') }}"
                         alt="Carte cachée"
                         class="devcard__img"
                 >
@@ -49,6 +49,7 @@
         {% endfor %}
     </div>
 
+    <h2>Vous</h2>
     <h2 class="titleH2">Plateau</h2>
 
     <div class="card-row">
@@ -87,6 +88,5 @@
             <p>Aucune carte en main.</p>
         {% endfor %}
     </div>
-
 {% endblock %}
 
