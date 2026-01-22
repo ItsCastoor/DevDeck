@@ -7,86 +7,87 @@
 {% endblock %}
 
 {% block body %}
+    <div class="game-wrapper">
+        <h1 class="titleH1">DevDeck</h1>
+        <p>
+            Statut : <strong>{{ partie.statut }}</strong><br>
+            Tour : {{ partie.numeroTour }}
+        </p>
 
-    <h1 class="titleH1">DevDeck</h1>
-    <p>
-        Statut : <strong>{{ partie.statut }}</strong><br>
-        Tour : {{ partie.numeroTour }}
-    </p>
+        <hr>
 
-    <hr>
+        <h2 class="titleH2">Joueur IA</h2>
 
-    <h2 class="titleH2">Joueur IA</h2>
+        <h2 class="titleH2">Main</h2>
+        <div class="card-row">
+            {% for i in 1..mainIA|length %}
+                <div class="devcard devcard--back">
+                    <img
+                            src="{{ asset('assets/cards/dos carte.png') }}"
+                            alt="Carte cachée"
+                            class="devcard__img"
+                    >
+                </div>
+            {% else %}
+                <p>Aucune carte en main</p>
+            {% endfor %}
+        </div>
 
-    <h2 class="titleH2">Main</h2>
-    <div class="card-row">
-        {% for i in 1..mainIA|length %}
-            <div class="devcard devcard--back">
-                <img
-                        src="{{ asset('assets/cards/dos carte.png') }}"
-                        alt="Carte cachée"
-                        class="devcard__img"
-                >
-            </div>
-        {% else %}
-            <p>Aucune carte en main</p>
-        {% endfor %}
-    </div>
-
-    <hr>
+        <hr>
 
 
-    <div class="card-row">
-        {% for cp in plateauIA %}
-            {% set c = cp.carte %}
-            <div class="devcard devcard--board">
-                <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
-                {#            <div class="devcard__title">{{ c.nom }}</div> #}
-                {#            <div class="devcard__desc">{{ c.description }}</div> #}
-            </div>
-        {% else %}
-            <p>Le Plateau de votre adversaire est vide.</p>
-        {% endfor %}
-    </div>
+        <div class="card-row">
+            {% for cp in plateauIA %}
+                {% set c = cp.carte %}
+                <div class="devcard devcard--board">
+                    <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
+                    {#            <div class="devcard__title">{{ c.nom }}</div> #}
+                    {#            <div class="devcard__desc">{{ c.description }}</div> #}
+                </div>
+            {% else %}
+                <p>Le Plateau de votre adversaire est vide.</p>
+            {% endfor %}
+        </div>
 
-    <h2>Vous</h2>
-    <h2 class="titleH2">Plateau</h2>
+        <h2>Vous</h2>
+        <h2 class="titleH2">Plateau</h2>
 
-    <div class="card-row">
-        {% for cp in plateauHumain %}
-            {% set c = cp.carte %}
-            <div class="devcard devcard--board">
-                <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
-                {#            <div class="devcard__title">{{ c.nom }}</div> #}
-                {#            <div class="devcard__desc">{{ c.description }}</div> #}
-            </div>
-        {% else %}
-            <p>Votre Plateau est vide.</p>
-        {% endfor %}
-    </div>
+        <div class="card-row">
+            {% for cp in plateauHumain %}
+                {% set c = cp.carte %}
+                <div class="devcard devcard--board">
+                    <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
+                    {#            <div class="devcard__title">{{ c.nom }}</div> #}
+                    {#            <div class="devcard__desc">{{ c.description }}</div> #}
+                </div>
+            {% else %}
+                <p>Votre Plateau est vide.</p>
+            {% endfor %}
+        </div>
 
-    <h2 class="titleH2">Main</h2>
-    <div class="card-row">
-        {% for cp in mainHumain %}
-            {% set c = cp.carte %}
-            <div class="devcard">
-                <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
-                {#            <div class="devcard__title">{{ c.nom }}</div> #}
-                {#            <div class="devcard__meta"> #}
-                {#                <span>Type: {{ c.type }}</span> #}
-                {#                <span>Coût PD: {{ c.coutPD }}</span> #}
-                {#                <span>+Argent: {{ c.gainArgent }}</span> #}
-                {#            </div> #}
-                {#            <div class="devcard__desc">{{ c.description }}</div> #}
+        <h2 class="titleH2">Main</h2>
+        <div class="card-row">
+            {% for cp in mainHumain %}
+                {% set c = cp.carte %}
+                <div class="devcard">
+                    <img class="devcard__img" src="{{ asset('assets/cards/' ~ c.nom ~ '.png') }}" alt="{{ c.nom }}">
+                    {#            <div class="devcard__title">{{ c.nom }}</div> #}
+                    {#            <div class="devcard__meta"> #}
+                    {#                <span>Type: {{ c.type }}</span> #}
+                    {#                <span>Coût PD: {{ c.coutPD }}</span> #}
+                    {#                <span>+Argent: {{ c.gainArgent }}</span> #}
+                    {#            </div> #}
+                    {#            <div class="devcard__desc">{{ c.description }}</div> #}
 
-                <form method="post" action="{{ path('partie_play_card', {id: partie.id, cartePartieId: cp.id}) }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token('play_card_' ~ cp.id) }}">
-                    <button class="btn" type="submit">Jouer sur le plateau</button>
-                </form>
-            </div>
-        {% else %}
-            <p>Aucune carte en main.</p>
-        {% endfor %}
+                    <form method="post" action="{{ path('partie_play_card', {id: partie.id, cartePartieId: cp.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('play_card_' ~ cp.id) }}">
+                        <button class="btn" type="submit">Jouer sur le plateau</button>
+                    </form>
+                </div>
+            {% else %}
+                <p>Aucune carte en main.</p>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
 
